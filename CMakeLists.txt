@@ -3,11 +3,12 @@ project(hdl_localization)
 
 # -mavx causes a lot of errors!!
 if("$ENV{ROS_DISTRO}" STRGREATER "melodic")
-  add_definitions(-std=c++17 -msse -msse2 -msse3 -msse4 -msse4.1 -msse4.2)
-  set(CMAKE_CXX_FLAGS "-std=c++17 -msse -msse2 -msse3 -msse4 -msse4.1 -msse4.2")
+  #add_definitions(-std=c++11 -std=c++17 -fopenmp -msse -msse2 -msse3 -msse4 -msse4.1 -msse4.2)
+  add_definitions(-std=c++11 -std=c++17 -fopenmp)
+  #set(CMAKE_CXX_FLAGS "-std=c++17 -msse -msse2 -msse3 -msse4 -msse4.1 -msse4.2")
 else()
-  add_definitions(-std=c++11 -msse -msse2 -msse3 -msse4 -msse4.1 -msse4.2)
-  set(CMAKE_CXX_FLAGS "-std=c++11 -msse -msse2 -msse3 -msse4 -msse4.1 -msse4.2")
+  #add_definitions(-std=c++11 -msse -msse2 -msse3 -msse4 -msse4.1 -msse4.2)
+  set(CMAKE_CXX_FLAGS "-std=c++11 -fopenmp")
 endif()
 
 # pcl 1.7 causes a segfault when it is built with debug mode

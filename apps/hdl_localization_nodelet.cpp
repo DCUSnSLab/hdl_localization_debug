@@ -1,6 +1,9 @@
 #include <mutex>
 #include <memory>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <ctime>
 
 #include <ros/ros.h>
 #include <pcl_ros/point_cloud.h>
@@ -37,6 +40,9 @@ namespace hdl_localization {
 class HdlLocalizationNodelet : public nodelet::Nodelet {
 public:
   using PointT = pcl::PointXYZI;
+  int count = 0;
+  
+  clock_t start = NULL, finish;
 
   HdlLocalizationNodelet() : tf_buffer(), tf_listener(tf_buffer) {
   }
@@ -88,7 +94,6 @@ private:
     std::string ndt_neighbor_search_method = private_nh.param<std::string>("ndt_neighbor_search_method", "DIRECT7");
     double ndt_neighbor_search_radius = private_nh.param<double>("ndt_neighbor_search_radius", 2.0);
     double ndt_resolution = private_nh.param<double>("ndt_resolution", 1.0);
-
     if(reg_method == "NDT_OMP") {
       NODELET_INFO("NDT_OMP is selected");
       pclomp::NormalDistributionsTransform<PointT, PointT>::Ptr ndt(new pclomp::NormalDistributionsTransform<PointT, PointT>());
@@ -432,6 +437,19 @@ private:
     odom.twist.twist.linear.y = 0.0;
     odom.twist.twist.angular.z = 0.0;
 
+
+
+	if (start == NULL) {
+		start = clock();
+	}
+	else {
+		finish = clock();
+		//std::cout << (double)(finish - start) / CLOCKS_PER_SEC << std::endl;
+		NODELET_INFO_STREAM((double)(finish - start));
+		start = clock();
+	}
+	count++;
+	NODELET_INFO_STREAM(count);
     pose_pub.publish(odom);
   }
 
